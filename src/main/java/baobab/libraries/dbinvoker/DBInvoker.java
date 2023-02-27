@@ -84,21 +84,31 @@ public class DBInvoker {
      * @throws SQLException             Si une erreur survient lors de l'accès vers la base de données.
      */
     public CachedRowSet executer(@NotNull String requete) throws SQLException, ClassNotFoundException {
+        SQLException exception = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        CachedRowSet resultat = null;
+
         Connection connection = this.getConnexion();
-        Statement statement = connection.createStatement();
 
-        if(this.isRequeteMAJ(requete)) {
-            statement.executeUpdate(requete);
-            return null;
-        }
+        try {
+            statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery(requete);
+            if (this.isRequeteMAJ(requete)) statement.executeUpdate(requete);
+            else resultSet = statement.executeQuery(requete);
 
-        CachedRowSet resultat =  RowSetProvider.newFactory().createCachedRowSet();
-        resultat.populate(resultSet);
+            if (resultSet != null) {
+                resultat = RowSetProvider.newFactory().createCachedRowSet();
+                resultat.populate(resultSet);
+            }
 
-        statement.close();
+        }catch (SQLException e) { exception = e; }
+
+        if(resultSet != null) resultSet.close();
+        if(statement != null) statement.close();
         connection.close();
+
+        if(exception != null) throw exception;
 
         return resultat;
     }
