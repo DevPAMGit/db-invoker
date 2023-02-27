@@ -9,13 +9,22 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>db-invoker</name>
-  <url>http://www.example.com</url>
+  <url>https://github.com/DevPAMGit/db-invoker</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub DevPAMGit Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/DevPAMGit/db-invoker</url>
+    </repository>
+  </distributionManagement>
+
 
   <dependencies>
 
@@ -43,14 +52,23 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (maybe moved to parent pom) -->
+    <pluginManagement>
+      <!--
+        lock down plugins versions to avoid using Maven defaults (maybe moved to parent pom)
+      -->
       <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <!--
+          Le cycle de vie de nettoyage,
+          voir https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle
+        -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <!--
+          Le cycle de vie par défaut, jar packaging:
+          voir https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging
+        -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
@@ -86,15 +104,22 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
+
       <plugin>
+
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+
         <configuration>
           <source>8</source>
           <target>8</target>
         </configuration>
+
       </plugin>
+
     </plugins>
+
   </build>
 </project>
