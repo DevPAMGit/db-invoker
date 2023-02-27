@@ -49,7 +49,7 @@ public class DBInvokerTest {
     /**
      * Requête d'insertion en base de données à tester.
      */
-    private final static String INSERTION = "INSERT INTO dum_dummy(dum_data) VALUES('d1')";
+    private final static String INSERTION = "INSERT INTO dum_dummy(dum_data) VALUES('d1');";
 
     /**
      * Requête de consultation en base de données à tester.
@@ -64,7 +64,7 @@ public class DBInvokerTest {
     /**
      * Requête de consultation en base de données à tester.
      */
-    private final static String MAJ = "UDPATE dum_dummy SET dum_data = 'd2' WHERE dum_data = 'd1'";
+    private final static String MAJ = "UPDATE dum_dummy SET dum_data = 'd2' WHERE dum_data = 'd1';";
 
     /**
      * La base de données qui servira au test.
@@ -93,7 +93,7 @@ public class DBInvokerTest {
     @Order(2)
     public void testerErreurAccesBdd() {
         Assertions.assertThrows(SQLException.class,
-                () -> new DBInvoker(TYPE, URL, BDD, LOGIN_ERREUR, MOT_DE_PASSE).executer(""));
+                () -> new DBInvoker(TYPE, URL, BDD, LOGIN_ERREUR, MOT_DE_PASSE).executer(INSERTION));
     }
 
     /**
@@ -117,21 +117,7 @@ public class DBInvokerTest {
     public void testerSelection() throws SQLException, ClassNotFoundException {
         CachedRowSet resultat = invoker.executer(SELECTION);
         Assertions.assertTrue(resultat.next());
-        Assertions.assertEquals("d1", resultat.getString(1));
-    }
-
-    /**
-     * Méthode permettant de tester une mise à jour de données en base.
-     * @throws ClassNotFoundException   Si la classe du driver est introuvable.
-     * @throws SQLException             Si une erreur survient lors de l'accès vers la base de données.
-     */
-    @Test
-    @Order(4)
-    public void testerMAJ() throws SQLException, ClassNotFoundException {
-        Assertions.assertNull(invoker.executer(MAJ));
-        CachedRowSet resultat = invoker.executer(SELECTION);
-        Assertions.assertTrue(resultat.next());
-        Assertions.assertEquals("d2", resultat.getString(1));
+        Assertions.assertEquals("d1", resultat.getString(2));
     }
 
     /**
@@ -141,6 +127,20 @@ public class DBInvokerTest {
      */
     @Test
     @Order(5)
+    public void testerMAJ() throws SQLException, ClassNotFoundException {
+        Assertions.assertNull(invoker.executer(MAJ));
+        CachedRowSet resultat = invoker.executer(SELECTION);
+        Assertions.assertTrue(resultat.next());
+        Assertions.assertEquals("d2", resultat.getString(2));
+    }
+
+    /**
+     * Méthode permettant de tester une mise à jour de données en base.
+     * @throws ClassNotFoundException   Si la classe du driver est introuvable.
+     * @throws SQLException             Si une erreur survient lors de l'accès vers la base de données.
+     */
+    @Test
+    @Order(6)
     public void testerSuppression() throws SQLException, ClassNotFoundException {
         Assertions.assertNull(invoker.executer(SUPPRESSION));
         CachedRowSet resultat = invoker.executer(SELECTION);
