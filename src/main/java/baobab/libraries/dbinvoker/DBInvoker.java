@@ -71,7 +71,9 @@ public class DBInvoker {
      * @return          <c>true</c> si la requête est un 'INSERT', 'UDPATE' ou 'DELETE', <c>false</c> sinon.
      */
     private boolean isRequeteMAJ(String requete){
-        return requete.trim().toLowerCase().matches("^(INSERT|UPDATE|DELETE)");
+        String req = requete.trim().toLowerCase();
+
+        return req.startsWith("insert") || req.startsWith("update") || req.startsWith("delete");
     }
 
     /**
@@ -90,9 +92,12 @@ public class DBInvoker {
             return null;
         }
 
-        CachedRowSet resultat =  RowSetProvider.newFactory().createCachedRowSet();
-        resultat.populate(statement.getResultSet());
+        ResultSet resultSet = statement.executeQuery(requete);
 
+        CachedRowSet resultat =  RowSetProvider.newFactory().createCachedRowSet();
+        resultat.populate(resultSet);
+
+        statement.close();
         connection.close();
 
         return resultat;
